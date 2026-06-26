@@ -16,7 +16,6 @@ import {
   Sparkles, 
   Layers, 
   ArrowRight, 
-  GraduationCap, 
   Code, 
   HelpCircle,
   FileText,
@@ -202,8 +201,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
         <div className="max-w-3xl space-y-6 relative z-10">
           <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-4 py-1.5 text-xs font-mono text-indigo-300 font-bold">
-            <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
-            Educational Silicon Engineering Sandbox
+            <Cpu className="w-3.5 h-3.5 text-indigo-400" />
+            Silicon Engineering Workspace & Sandbox
           </div>
           
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans leading-tight">
@@ -214,7 +213,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </h1>
 
           <p className="text-sm md:text-base text-slate-300 font-mono leading-relaxed max-w-2xl">
-            CorePick Architect is an interactive learning sandbox built specifically for students, university courses, and early-career hardware professionals. Rather than a production-grade commercial utility, this platform is an educational companion designed to help you study, visualize, and master the core phases of semiconductor engineering—from architectural planning to silicon economics.
+            CorePick Architect is an interactive design and analysis sandbox built to help you explore, visualize, and understand the end-to-end silicon engineering lifecycle. From mapping architectural workloads and modeling roofline performance to analyzing wafer fabrication economics and generating RTL registers, this platform provides hands-on simulators to demystify and master key semiconductor concepts.
           </p>
 
           <div className="flex flex-wrap gap-4 pt-2">
@@ -269,10 +268,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* CORE PHASES OF SILICON EDUCATION CENTER */}
+      {/* CORE PHASES OF SILICON DESIGN & DEVELOPMENT */}
       <section className="space-y-6">
         <div className="flex items-center gap-2">
-          <GraduationCap className="w-5 h-5 text-indigo-400" />
+          <Layers className="w-5 h-5 text-indigo-400" />
           <div>
             <h2 className="text-lg font-bold font-mono uppercase tracking-wider text-white">Silicon Design & Verification Phases</h2>
             <p className="text-xs text-slate-500 font-mono">LEARN THE CRITICAL STAGES OF SEMICONDUCTOR ASIC DEVELOPMENT</p>
