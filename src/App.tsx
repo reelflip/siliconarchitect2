@@ -16,10 +16,11 @@ import { RooflineModel } from "./components/RooflineModel";
 import { WaferYieldCalculator } from "./components/WaferYieldCalculator";
 import { RtlRegisterGenerator } from "./components/RtlRegisterGenerator";
 import { generateLocalReport } from "./utils/localReportGenerator";
-import { Cpu, FileText, Terminal, AlertTriangle, CpuIcon, BookOpen, Home } from "lucide-react";
+import { Cpu, FileText, Terminal, AlertTriangle, CpuIcon, BookOpen, Home, Mail } from "lucide-react";
 import { KnowledgeHub } from "./components/KnowledgeHub";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { HomePage } from "./components/HomePage";
+import { ContactUs } from "./components/ContactUs";
 
 
 export default function App() {
@@ -46,7 +47,17 @@ export default function App() {
   const [activeMiddleTab, setActiveMiddleTab] = useState<"estimates" | "roofline" | "wafer" | "registers">("estimates");
   
   // 4. App-level navigation state
-  const [currentView, setCurrentView] = useState<"home" | "workspace" | "knowledge">("home");
+  const [currentView, setCurrentView] = useState<"home" | "workspace" | "knowledge" | "contact">("home");
+
+  const handleNavigate = (
+    view: "home" | "workspace" | "knowledge" | "contact",
+    middleTab?: "estimates" | "roofline" | "wafer" | "registers",
+    rightTab?: "report" | "verification"
+  ) => {
+    setCurrentView(view);
+    if (middleTab) setActiveMiddleTab(middleTab);
+    if (rightTab) setActiveRightTab(rightTab);
+  };
 
   // 4. Instantly compute deterministic estimates on the client side whenever inputs change
   const outputs = useMemo(() => {
@@ -80,8 +91,8 @@ export default function App() {
   return (
     <div id="ai-silicon-workspace" className="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased">
       {/* HEADER SECTION */}
-      <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="flex items-center gap-3">
+      <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3 md:flex-1 justify-start w-full md:w-auto">
           <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-950/40 border border-indigo-500/30">
             <Cpu className="w-5.5 h-5.5 text-white animate-pulse" />
           </div>
@@ -98,8 +109,8 @@ export default function App() {
           </div>
         </div>
 
-        {/* Dynamic View Navigation */}
-        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800/80">
+        {/* Dynamic View Navigation - Center Fixed */}
+        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800/80 shrink-0">
           <button
             onClick={() => setCurrentView("home")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all ${
@@ -133,30 +144,128 @@ export default function App() {
             <BookOpen className="w-3.5 h-3.5" />
             <span>KNOWLEDGE HUB & BLOG</span>
           </button>
+          <button
+            onClick={() => setCurrentView("contact")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] font-bold transition-all ${
+              currentView === "contact"
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-950/40"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Mail className="w-3.5 h-3.5" />
+            <span>CONTACT US</span>
+          </button>
         </div>
 
-        {/* Process State Quick Overview Bar */}
-        <div className="flex flex-wrap gap-2.5 text-[10px] font-mono">
-          <div className="bg-slate-950 px-2.5 py-1.5 rounded border border-slate-800">
-            <span className="text-slate-500">WORKLOAD:</span> <span className="text-slate-300 font-bold uppercase">{inputs.workloadType.replace("_", " ")}</span>
-          </div>
-          <div className="bg-slate-950 px-2.5 py-1.5 rounded border border-slate-800">
-            <span className="text-slate-500">FABRICATION:</span> <span className="text-indigo-400 font-bold">{inputs.processNode} GAA</span>
-          </div>
-          <div className="bg-slate-950 px-2.5 py-1.5 rounded border border-slate-800">
-            <span className="text-slate-500">POWER LIMIT:</span> <span className="text-amber-400 font-bold">{inputs.powerBudget}W</span>
-          </div>
-        </div>
+        {/* Right Section - Balanced spacer to keep menu perfectly centered, displaying nothing */}
+        <div className="hidden md:block md:flex-1" />
       </header>
 
       {/* WORKSPACE COLUMN LAYOUT */}
       <main id="app-main-content" className="flex-1 p-6 space-y-6 overflow-y-auto min-h-0">
         {currentView === "home" ? (
           <ErrorBoundary>
-            <HomePage onNavigate={setCurrentView} />
+            <HomePage onNavigate={handleNavigate} />
           </ErrorBoundary>
         ) : currentView === "workspace" ? (
           <>
+            {/* WORKFLOW STEPPER FOR INTUITIVE SEQUENTIAL DISCOVERY */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 md:p-5 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+              <div className="space-y-1 max-w-sm">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                  <span className="text-[10px] font-bold font-mono tracking-wider text-indigo-400 uppercase">ACTIVE CO-DESIGN SESSION</span>
+                </div>
+                <h3 className="text-sm font-black font-mono text-white">ASIC Micro-Architectural Pipeline</h3>
+                <p className="text-[10px] text-slate-400 font-mono leading-relaxed">
+                  Click any step to focus that part of the Silicon Co-Design workflow. Learn by executing sequentially from workload spec to silicon verification.
+                </p>
+              </div>
+
+              {/* Horizontal Steps Indicator */}
+              <div className="flex-1 overflow-x-auto pb-2 lg:pb-0 scrollbar-none flex items-center justify-start lg:justify-end gap-2 text-left font-mono">
+                {[
+                  {
+                    num: "1",
+                    title: "Workload Spec",
+                    desc: "Tuning Parameters",
+                    middleTab: "estimates",
+                    rightTab: "report",
+                    active: activeMiddleTab === "estimates" && activeRightTab === "report",
+                    color: "border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/5"
+                  },
+                  {
+                    num: "2",
+                    title: "Floorplan Area",
+                    desc: "SRAM & MAC Layout",
+                    middleTab: "estimates",
+                    rightTab: "report",
+                    active: activeMiddleTab === "estimates" && activeRightTab === "report",
+                    color: "border-teal-500/50 text-teal-400 hover:bg-teal-500/5"
+                  },
+                  {
+                    num: "3",
+                    title: "Roofline Model",
+                    desc: "Memory vs Compute",
+                    middleTab: "roofline",
+                    rightTab: "report",
+                    active: activeMiddleTab === "roofline",
+                    color: "border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/5"
+                  },
+                  {
+                    num: "4",
+                    title: "Wafer Economics",
+                    desc: "Defects & Die Yields",
+                    middleTab: "wafer",
+                    rightTab: "report",
+                    active: activeMiddleTab === "wafer",
+                    color: "border-rose-500/50 text-rose-400 hover:bg-rose-500/5"
+                  },
+                  {
+                    num: "5",
+                    title: "RTL Generator",
+                    desc: "Verilog Register Maps",
+                    middleTab: "registers",
+                    rightTab: "report",
+                    active: activeMiddleTab === "registers",
+                    color: "border-amber-500/50 text-amber-400 hover:bg-amber-500/5"
+                  },
+                  {
+                    num: "6",
+                    title: "Verification Suite",
+                    desc: "Testbench Coverage",
+                    middleTab: "estimates",
+                    rightTab: "verification",
+                    active: activeRightTab === "verification",
+                    color: "border-indigo-500/50 text-indigo-400 hover:bg-indigo-500/5"
+                  }
+                ].map((step, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setActiveMiddleTab(step.middleTab as any);
+                      setActiveRightTab(step.rightTab as any);
+                    }}
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl border text-left min-w-[140px] md:min-w-0 transition-all ${
+                      step.active
+                        ? "bg-slate-950 border-indigo-500/80 shadow-md shadow-indigo-950/20 scale-[1.02]"
+                        : "bg-slate-950/40 border-slate-800 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center font-black text-xs ${
+                      step.active ? "bg-indigo-600 text-white" : "bg-slate-900 text-slate-500"
+                    }`}>
+                      {step.num}
+                    </div>
+                    <div className="space-y-0.5">
+                      <div className="text-[9px] font-black text-white leading-none uppercase">{step.title}</div>
+                      <div className="text-[8px] text-slate-500 leading-none">{step.desc}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
               {/* LEFT COLUMN: Input Controllers & Quick Settings (Col 4) */}
               <div className="xl:col-span-4 space-y-6 flex flex-col min-h-0">
@@ -274,9 +383,13 @@ export default function App() {
               }}
             />
           </>
-        ) : (
+        ) : currentView === "knowledge" ? (
           <ErrorBoundary>
             <KnowledgeHub />
+          </ErrorBoundary>
+        ) : (
+          <ErrorBoundary>
+            <ContactUs />
           </ErrorBoundary>
         )}
       </main>

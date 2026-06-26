@@ -25,7 +25,11 @@ import {
 } from "lucide-react";
 
 interface HomePageProps {
-  onNavigate: (view: "home" | "workspace" | "knowledge") => void;
+  onNavigate: (
+    view: "home" | "workspace" | "knowledge",
+    middleTab?: "estimates" | "roofline" | "wafer" | "registers",
+    rightTab?: "report" | "verification"
+  ) => void;
 }
 
 interface SiliconPhase {
@@ -38,6 +42,8 @@ interface SiliconPhase {
   learnings: string[];
   jargon: { term: string; definition: string }[];
   targetAction: "workspace" | "knowledge";
+  targetMiddleTab?: "estimates" | "roofline" | "wafer" | "registers";
+  targetRightTab?: "report" | "verification";
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
@@ -60,7 +66,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "PPA", definition: "Power, Performance, and Area - the three major axes of silicon architecture optimization." },
         { term: "IP Block", definition: "Intellectual Property block - a pre-designed, reusable layout of a logic module used as a component." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "estimates"
     },
     {
       id: "rtl",
@@ -78,7 +85,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "HDL", definition: "Hardware Description Language - specialized computer languages used to program and specify digital hardware systems." },
         { term: "RTL", definition: "Register Transfer Level - high-level design abstraction describing register transactions and signal flows." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "registers"
     },
     {
       id: "val",
@@ -96,7 +104,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "UVM", definition: "Universal Verification Methodology - a standardized system class library in SystemVerilog for modular verification." },
         { term: "DUT", definition: "Design Under Test - the design block or full chip being verified inside the simulator." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "estimates",
+      targetRightTab: "verification"
     },
     {
       id: "synthesis",
@@ -114,7 +124,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "Netlist", definition: "A list of digital components and connections (nets) between them, compiled from abstract HDL code." },
         { term: "Standard Cell", definition: "A pre-designed logic cell (such as a full adder or D flip-flop) of a standardized height." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "estimates"
     },
     {
       id: "phys",
@@ -132,7 +143,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "DRC", definition: "Design Rule Checking - verification validating that layout geometries meet precise manufacturing limits." },
         { term: "P&R", definition: "Placement and Routing - back-end physical design stage where cells are placed and connected on silicon layers." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "estimates"
     },
     {
       id: "mask",
@@ -150,7 +162,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "GDSII", definition: "Graphic Database System II - the classic standard database file format for integrated circuit layout artwork." },
         { term: "Mask", definition: "A photographic template on glass used in lithography to define patterns on the wafer surface." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "estimates"
     },
     {
       id: "fab",
@@ -168,7 +181,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "Wafer", definition: "A thin slice of crystalline semiconductor material used as a substrate to fabricate integrated circuits." },
         { term: "Die", definition: "An individual rectangular block of silicon on a wafer containing a complete functional circuit." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "wafer"
     },
     {
       id: "postval",
@@ -186,7 +200,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         { term: "Errata", definition: "A published list of functional errors, bugs, or anomalies discovered in microprocessors after production." },
         { term: "Shmoo Plot", definition: "A visual graph representing silicon operational margins by sweeping voltage against frequency." }
       ],
-      targetAction: "workspace"
+      targetAction: "workspace",
+      targetMiddleTab: "estimates",
+      targetRightTab: "verification"
     }
   ];
 
@@ -265,6 +281,106 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <p className="text-xs text-slate-400 font-mono leading-relaxed">
             Evaluate Murphy's yield equation across cutting-edge nodes (3nm, 5nm, 7nm). Estimate die densities and fabrication budgets mathematically.
           </p>
+        </div>
+      </section>
+
+      {/* INTERACTIVE DESIGN WORKFLOW PIPELINE */}
+      <section className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+          <div className="space-y-1">
+            <h2 className="text-lg font-bold font-mono uppercase tracking-wider text-white">Your Silicon Co-Design Pipeline</h2>
+            <p className="text-xs text-slate-500 font-mono">FOLLOW THIS LOGICAL INTERACTIVE PIPELINE FROM SPECS TO FABRICATION ECONOMICS</p>
+          </div>
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 uppercase">
+            6 Core Laboratories
+          </span>
+        </div>
+
+        {/* Horizontal Pipeline Steps */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 relative">
+          {[
+            {
+              step: "01",
+              title: "TUNE WORKLOAD",
+              desc: "Define vision models or transformer parameters.",
+              icon: <Layers className="w-4 h-4" />,
+              accent: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:border-emerald-500/40",
+              middleTab: "estimates",
+              rightTab: "report",
+            },
+            {
+              step: "02",
+              title: "FLOORPLAN DIE",
+              desc: "Map MAC units and custom SRAM array boundaries.",
+              icon: <Cpu className="w-4 h-4" />,
+              accent: "text-teal-400 bg-teal-500/10 border-teal-500/20 hover:border-teal-500/40",
+              middleTab: "estimates",
+              rightTab: "report",
+            },
+            {
+              step: "03",
+              title: "ROOFLINE LIMITS",
+              desc: "Model dynamic memory vs compute operational bounds.",
+              icon: <Scale className="w-4 h-4" />,
+              accent: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20 hover:border-cyan-500/40",
+              middleTab: "roofline",
+              rightTab: "report",
+            },
+            {
+              step: "04",
+              title: "FABRICATION COST",
+              desc: "Solve Murphy yield equations across wafer nodes.",
+              icon: <TrendingUp className="w-4 h-4" />,
+              accent: "text-rose-400 bg-rose-500/10 border-rose-500/20 hover:border-rose-500/40",
+              middleTab: "wafer",
+              rightTab: "report",
+            },
+            {
+              step: "05",
+              title: "RTL REGISTERS",
+              desc: "Export SystemVerilog hardware register blocks.",
+              icon: <Code className="w-4 h-4" />,
+              accent: "text-amber-400 bg-amber-500/10 border-amber-500/20 hover:border-amber-500/40",
+              middleTab: "registers",
+              rightTab: "report",
+            },
+            {
+              step: "06",
+              title: "VERIFICATION",
+              desc: "Run active UVM simulations & check line coverage.",
+              icon: <Terminal className="w-4 h-4" />,
+              accent: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20 hover:border-indigo-500/40",
+              middleTab: "estimates",
+              rightTab: "verification",
+            }
+          ].map((item, index) => (
+            <button
+              key={item.step}
+              onClick={() => onNavigate("workspace", item.middleTab as any, item.rightTab as any)}
+              className="bg-slate-950 border border-slate-850 p-4 rounded-xl flex flex-col justify-between text-left hover:border-slate-700 transition-all group relative"
+            >
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-bold font-mono text-slate-600">STEP {item.step}</span>
+                  <div className={`p-1.5 rounded-lg border ${item.accent} transition-colors`}>
+                    {item.icon}
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-xs font-black font-mono text-white tracking-tight uppercase group-hover:text-indigo-400 transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-[10px] text-slate-500 font-mono leading-normal">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+              <div className="pt-3 mt-1 border-t border-slate-900 text-[9px] font-mono text-slate-600 flex justify-between items-center w-full">
+                <span>Configure lab</span>
+                <span className="group-hover:translate-x-1 transition-transform text-indigo-400 font-bold">➔</span>
+              </div>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -408,7 +524,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   <div className="border-t border-slate-850 pt-4 mt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
                     <span className="text-[10px] text-slate-500 font-mono">Interactive tool link is fully synchronized.</span>
                     <button
-                      onClick={() => onNavigate(phase.targetAction)}
+                      onClick={() => onNavigate(phase.targetAction, phase.targetMiddleTab, phase.targetRightTab)}
                       className={`w-full sm:w-auto bg-${themeColor}-600/10 hover:bg-${themeColor}-600/20 text-${themeColor}-400 border border-${themeColor}-500/30 font-bold font-mono text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all`}
                     >
                       {phase.targetAction === "workspace" ? (
@@ -455,45 +571,61 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
         {/* Feature Bento Showcase */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 font-mono">
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-2">
+          <button
+            onClick={() => onNavigate("workspace", "estimates")}
+            className="bg-slate-950 p-4 rounded-xl border border-slate-850 hover:border-emerald-500/30 text-left space-y-2 transition-all hover:bg-slate-900/40 group relative overflow-hidden"
+          >
             <div className="w-7 h-7 bg-emerald-500/10 border border-emerald-500/20 rounded-md flex items-center justify-center">
-              <Cpu className="w-4 h-4 text-emerald-400" />
+              <Cpu className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
             </div>
-            <span className="text-xs font-bold text-slate-200 block">Floorplan Visualizer</span>
+            <span className="text-xs font-bold text-slate-200 block group-hover:text-emerald-400 transition-colors">Floorplan Visualizer</span>
             <p className="text-[11px] text-slate-400 leading-normal">
               Map MAC units and SRAM blocks across actual physical square-millimeter boundaries inside deep sub-micron process nodes.
             </p>
-          </div>
+            <span className="absolute bottom-2 right-3 text-[9px] text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">Launch →</span>
+          </button>
 
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-2">
+          <button
+            onClick={() => onNavigate("workspace", "roofline")}
+            className="bg-slate-950 p-4 rounded-xl border border-slate-850 hover:border-cyan-500/30 text-left space-y-2 transition-all hover:bg-slate-900/40 group relative overflow-hidden"
+          >
             <div className="w-7 h-7 bg-cyan-500/10 border border-cyan-500/20 rounded-md flex items-center justify-center">
-              <Scale className="w-4 h-4 text-cyan-400" />
+              <Scale className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
             </div>
-            <span className="text-xs font-bold text-slate-200 block">Roofline Model</span>
+            <span className="text-xs font-bold text-slate-200 block group-hover:text-cyan-400 transition-colors">Roofline Model</span>
             <p className="text-[11px] text-slate-400 leading-normal">
               Plot operational ceilings dynamically for standard AI models (Llama 3, ResNet) based on local memory and FLOPS.
             </p>
-          </div>
+            <span className="absolute bottom-2 right-3 text-[9px] text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">Launch →</span>
+          </button>
 
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-2">
+          <button
+            onClick={() => onNavigate("workspace", "registers")}
+            className="bg-slate-950 p-4 rounded-xl border border-slate-850 hover:border-indigo-500/30 text-left space-y-2 transition-all hover:bg-slate-900/40 group relative overflow-hidden"
+          >
             <div className="w-7 h-7 bg-indigo-500/10 border border-indigo-500/20 rounded-md flex items-center justify-center">
-              <Terminal className="w-4 h-4 text-indigo-400" />
+              <Terminal className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
             </div>
-            <span className="text-xs font-bold text-slate-200 block">RTL Auto-Generator</span>
+            <span className="text-xs font-bold text-slate-200 block group-hover:text-indigo-400 transition-colors">RTL Auto-Generator</span>
             <p className="text-[11px] text-slate-400 leading-normal">
               Generate synthesizing SystemVerilog code, memory bus mappings, and register mirrors automatically with custom configurations.
             </p>
-          </div>
+            <span className="absolute bottom-2 right-3 text-[9px] text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">Launch →</span>
+          </button>
 
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-2">
+          <button
+            onClick={() => onNavigate("workspace", "wafer")}
+            className="bg-slate-950 p-4 rounded-xl border border-slate-850 hover:border-rose-500/30 text-left space-y-2 transition-all hover:bg-slate-900/40 group relative overflow-hidden"
+          >
             <div className="w-7 h-7 bg-rose-500/10 border border-rose-500/20 rounded-md flex items-center justify-center">
-              <TrendingUp className="w-4 h-4 text-rose-400" />
+              <TrendingUp className="w-4 h-4 text-rose-400 group-hover:scale-110 transition-transform" />
             </div>
-            <span className="text-xs font-bold text-slate-200 block">Wafer Defect Estimator</span>
+            <span className="text-xs font-bold text-slate-200 block group-hover:text-rose-400 transition-colors">Wafer Defect Estimator</span>
             <p className="text-[11px] text-slate-400 leading-normal">
               Calculate silicon wafer yield rates, Dies-Per-Wafer (DPW), and unit fabrication prices using industrial defect equations.
             </p>
-          </div>
+            <span className="absolute bottom-2 right-3 text-[9px] text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity">Launch →</span>
+          </button>
         </div>
       </section>
 
