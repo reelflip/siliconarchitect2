@@ -1,0 +1,8 @@
+{
+  "name": "Remix: COREPICK ARCHITECT",
+  "description": "A high-fidelity silicon accelerator design and NPU estimation workspace analyzing timing, memory bandwidth, power, and area with integrated hardware verification suites.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
